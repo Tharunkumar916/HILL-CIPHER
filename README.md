@@ -29,7 +29,72 @@ STEP-4: Multiply the two matrices to obtain the cipher text of length three.
 STEP-5: Combine all these groups to get the complete cipher text.
 
 ## PROGRAM 
+```
 
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+#define SIZE 3
+
+int charToNum(char c) {
+    return toupper(c) - 'A';
+}
+
+char numToChar(int n) {
+    return (n % 26) + 'A';
+}
+
+void encryptBlock(int block[SIZE], int key[SIZE][SIZE], char result[SIZE]) {
+    for (int i = 0; i < SIZE; i++) {
+        int sum = 0;
+        for (int j = 0; j < SIZE; j++) {
+            sum += key[i][j] * block[j];
+        }
+        result[i] = numToChar(sum % 26);
+    }
+}
+
+int main() {
+    char plaintext[100];
+    char ciphertext[100] = "";
+    int key[SIZE][SIZE] = {
+        {6, 24, 1},
+        {13, 16, 10},
+        {20, 17, 15}
+    };
+    int block[SIZE];
+    int len;
+
+    printf("Enter Plaintext: ");
+    scanf("%s", plaintext);
+
+    len = strlen(plaintext);
+
+    while (len % SIZE != 0) {
+        plaintext[len++] = 'X'; // padding
+        plaintext[len] = '\0';
+    }
+
+    for (int k = 0; k < len; k += SIZE) {
+        for (int i = 0; i < SIZE; i++) {
+            block[i] = charToNum(plaintext[k + i]);
+        }
+        char result[SIZE];
+        encryptBlock(block, key, result);
+        strncat(ciphertext, result, SIZE);
+    }
+
+    printf("Ciphertext: %s\n", ciphertext);
+    return 0;
+}
+
+```
 ## OUTPUT
 
+<img width="811" height="285" alt="Screenshot 2025-09-19 092937" src="https://github.com/user-attachments/assets/42292aae-8dee-49f2-8c1e-5a7d67e4bbaf" />
+
+
 ## RESULT
+~~~
+The program is executed successfully.
